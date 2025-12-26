@@ -12,6 +12,8 @@ local args = {
 game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PurchaseItem"):FireServer(unpack(args))
 - pokupka unitov
 --]]
+local huy = false
+local huy2 = false
 local automatic = false
 local automatic2 = false
 local enabled = false
@@ -170,9 +172,67 @@ local Toggle = Tab2:CreateToggle({
                     	"Troops"
                     }
                     game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PurchaseItem"):FireServer(unpack(args))
-                    task.wait(0.001)
+                    task.wait(10)
                 end
                 automatic2 = false
+            end)
+        end
+    end
+})
+local Toggle = Tab2:CreateToggle({
+    Name = "Начать автр покупку заклинаний",
+    CurrentValue = false,
+    Flag = "elixrun",
+    Callback = function(Value)
+        huy = Value
+
+        if huy and not huy2 then
+            huy2 = true
+            task.spawn(function()
+                while huy do
+                    local args = {
+                	    "Freeze",
+	                    "Spells"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PurchaseItem"):FireServer(unpack(args))
+                    local args = {
+                	    "Fireball",
+	                    "Spells"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PurchaseItem"):FireServer(unpack(args))
+                    local args = {
+                	    "Heal",
+	                    "Spells"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PurchaseItem"):FireServer(unpack(args))
+                    local args = {
+                	    "Rage",
+	                    "Spells"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PurchaseItem"):FireServer(unpack(args))
+                    local args = {
+                	    "Poison",
+	                    "Spells"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PurchaseItem"):FireServer(unpack(args))
+                    local args = {
+                	    "Earth",
+	                    "Spells"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PurchaseItem"):FireServer(unpack(args))
+                    local args = {
+                	    "Arthurs Sword",
+	                    "Spells"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PurchaseItem"):FireServer(unpack(args))
+                    local args = {
+                	    "Lightning",
+	                    "Spells"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("PurchaseItem"):FireServer(unpack(args))
+                    task.wait(10)
+                end
+                huy2 = false
             end)
         end
     end

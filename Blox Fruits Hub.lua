@@ -40,7 +40,7 @@ local Section = Tab:CreateSection("Я давно не тестировал эт�
 local Button = Tab:CreateButton({
    Name = "Quantum Onyx",
    Callback = function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs/heads/main/quantum.lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs/heads/main/Quantum%20Onyx.lua"))()
    end,
 })
 local Button = Tab:CreateButton({

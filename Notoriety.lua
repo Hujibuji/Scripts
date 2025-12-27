@@ -1,3 +1,4 @@
+-- Большая просьба. Упоминайте меня как автора!
 -- Загрузка Rayfield UI Library
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 -- Создание окна с настройками
@@ -233,14 +234,14 @@ local PoliceToggle = Tab:CreateToggle({
                                 local humanoid = guard:FindFirstChildWhichIsA("Humanoid")
                                 local head = guard:FindFirstChild("Head")
 
-                                -- Логика KILL (Damage Remote)
+                                
                                 if tool and humanoid and head and humanoid.Health > 0 then
                                     game:GetService("ReplicatedStorage").RS_Package.Assets.Remotes.Damage:FireServer(
                                         "Damage", tool, humanoid, humanoid.Health, head, tool.Name, head.Position, {}
                                     )
                                 end
 
-                                -- Логика FLING (как в твоем коде)
+                                
                                 if not skip[guard] then
                                     hrp.CFrame = CFrame.new(root.Position + Vector3.new(999999, -999999, 0))
                                 end
@@ -300,11 +301,11 @@ local FlyToggle = Tab2:CreateToggle({
       if Value then startFlying() else stopFlying() end
    end,
 })
--- Обработка клавищ
+-- Обработка клавиш
 UserInputService.InputBegan:Connect(function(input, gP)
     if gP then return end
     if input.KeyCode == Enum.KeyCode.Y then
-        -- Инвертируем значение Toggle, что автоматически вызовет start/stop
+        
         FlyToggle:Set(not FlyToggle.CurrentValue)
     end
 end)
@@ -321,7 +322,7 @@ local StaminaToggle = Tab2:CreateToggle({
                     local plr = game.Players.LocalPlayer.Name
                     local v = game:GetService("Workspace").Criminals[plr]
                     
-                    -- Твой код из кнопок:
+                    
                     v.MaxStamina.Value = 10000
                     v.Stamina.Value = 10000
                     
@@ -331,6 +332,7 @@ local StaminaToggle = Tab2:CreateToggle({
         end
     end,
 })
+local Paragraph = Tab2:CreateParagraph({Title = "Важно!", Content = "Используйте бесконечную выносливоть только тогда, когда вы появитетесь на карте, иначе она не сработает."})
 local ESPguard = Tab3:CreateToggle({
     Name = "Полиция ESP",
     CurrentValue = false,
@@ -482,7 +484,7 @@ local SpecialKeyESP = Tab3:CreateToggle({
                 table.insert(_G.specialKeyESP, hl)
             end
 
-            -- Guard 14
+            
             local policeFolder = workspace:FindFirstChild("Police")
             local guard14 = policeFolder and policeFolder:GetChildren()[14]
             local keyAcc = guard14 and guard14:FindFirstChild("KeyAccessory")
@@ -490,7 +492,7 @@ local SpecialKeyESP = Tab3:CreateToggle({
                 makeESP(keyAcc.Handle, "Guard Key")
             end
 
-            -- Map Keys
+            
             local map = workspace:FindFirstChild("Map")
             if map then
                 for _, subFolder in pairs(map:GetChildren()) do

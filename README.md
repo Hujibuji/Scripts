@@ -26,6 +26,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs
 🟡 - Работает, но с багами |
 🟠 - Нестабильная параша |
 🔴 - Не работает |
+
 🟣 - на обновлении |
 - 🟢 Make a Army
 - 🟢 Blox Fruits (Hub со скриптами)

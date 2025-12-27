@@ -250,12 +250,6 @@ local PoliceToggle = Tab:CreateToggle({
                 end
             end)
 
-            Rayfield:Notify({
-                Title = "Police Kill & Fling",
-                Content = "Fitur Kill All Police Diaktifkan.",
-                Duration = 3,
-                Image = 4483362458,
-            })
         else
             if policeLoop then
                 task.cancel(policeLoop)
@@ -298,18 +292,22 @@ local citizenToggle = Tab:CreateToggle({
     end,
 })
 -- Полет
-local poletToggle = Tab2:CreateToggle({
-   Name = "Полет",
+local FlyToggle = Tab2:CreateToggle({
+   Name = "Полет (на Y)",
    CurrentValue = false,
    Flag = "FlyToggle", 
    Callback = function(Value)
-      if Value then
-          startFlying()
-      else
-          stopFlying()
-      end
+      if Value then startFlying() else stopFlying() end
    end,
 })
+-- Обработка клавищ
+UserInputService.InputBegan:Connect(function(input, gP)
+    if gP then return end
+    if input.KeyCode == Enum.KeyCode.Y then
+        -- Инвертируем значение Toggle, что автоматически вызовет start/stop
+        FlyToggle:Set(not FlyToggle.CurrentValue)
+    end
+end)
 -- Бесконечная выносливость
 local StaminaToggle = Tab2:CreateToggle({
     Name = "Бесконечная выносливость",

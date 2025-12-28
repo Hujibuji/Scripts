@@ -32,3 +32,4 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs
 - 🟢 Make a Army
 - 🟢 Blox Fruits (Hub со скриптами)
 - 🟢 Notoriety
+- 🟢 Steal a Brainrot (Hub со скриптами)

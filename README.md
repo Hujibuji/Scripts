@@ -33,3 +33,4 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs
 - 🟢 Blox Fruits (Hub со скриптами)
 - 🟢 Notoriety
 - 🟢 Steal a Brainrot (Hub со скриптами)
+- 🟢 Speed Clicker (пока сырой)

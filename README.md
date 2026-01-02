@@ -3,7 +3,7 @@
 
 Ниже — мои Roblox-скрипты и способы запуска.
 
-## 🚀 Loader (рекомендуется)
+## 🚀 Loader
 Запускает основной лоадер и подтягивает нужные модули.
 ````lua
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs/heads/main/Loader.lua"))()

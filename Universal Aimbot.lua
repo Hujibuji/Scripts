@@ -131,16 +131,7 @@ Tab:CreateSlider({
 -- RAYFIELD ESP (BOX + SKELETON + INFO)
 -- FINAL VERSION WITH settings_esp
 
--- ===== LOAD RAYFIELD =====
-local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
-
--- ===== SERVICES =====
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local Camera = workspace.CurrentCamera
-
-local LP = Players.LocalPlayer
-
+-- ===== LOAD RAYFIELD ===
 -- ===== SETTINGS =====
 local settings_esp = {
 	Enabled = true,

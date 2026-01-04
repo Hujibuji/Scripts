@@ -43,7 +43,7 @@ local autoFarmActive = false
 
 local Dropdown = Tab:CreateDropdown({
    Name = "Выберите кейс",
-   Options = {"Trash", "Plodder", "Office Clerk"},
+   Options = {"Trash", "Durov", "REDO", "Magnate", "Cirque", "Plodder", "Office Clerk", "Manager"},
    CurrentOption = {"Trash"},
    MultipleOptions = false,
    Callback = function(Option)
@@ -66,7 +66,7 @@ local Input = Tab:CreateInput({
          else
             caseAmount = num
          end
-         print("Установлено количество: " .. caseAmount)
+         print("Установлено количество: " ..  )
       else
          warn("Пожалуйста, введите число!")
       end

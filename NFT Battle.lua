@@ -66,7 +66,7 @@ local Input = Tab:CreateInput({
          else
             caseAmount = num
          end
-         print("Установлено количество: " ..  )
+         print("OK")
       else
          warn("Пожалуйста, введите число!")
       end

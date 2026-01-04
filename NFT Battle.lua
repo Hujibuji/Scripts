@@ -43,7 +43,7 @@ local autoFarmActive = false
 
 local Dropdown = Tab:CreateDropdown({
    Name = "Выберите кейс",
-   Options = {"Trash", "Common", "Rare", "Epic", "Legendary"},
+   Options = {"Trash", "Plodder", "Office Clerk"},
    CurrentOption = {"Trash"},
    MultipleOptions = false,
    Callback = function(Option)

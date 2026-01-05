@@ -4,6 +4,7 @@ local SupportedGames = {
     [109983668079237] = "https://raw.githubusercontent.com/Hujibuji/Scripts/refs/heads/main/Sab%20Hub.lua",
     [140374914197602] = "https://raw.githubusercontent.com/Hujibuji/Scripts/refs/heads/main/Speed%20Clicker.lua",
     [126509999114328] = "https://raw.githubusercontent.com/Hujibuji/Scripts/refs/heads/main/99%20Nights%20In%20Da%20Forest.lua",
+    [76603753346534] = "https://raw.githubusercontent.com/Hujibuji/Scripts/refs/heads/main/NFT%20Battle.lua",
 }
 
 local currentPlaceId = game.PlaceId

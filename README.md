@@ -35,3 +35,4 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs
 - 🟢 Steal a Brainrot (Hub со скриптами)
 - 🟢 Speed Clicker (пока сырой)
 - 🟢 99 Nights in the Forest (обычный voidware, но потом будет хаб со скриптами)
+- 🟢 NFT Battle (может быть, самый лучший скрипт сейчас)

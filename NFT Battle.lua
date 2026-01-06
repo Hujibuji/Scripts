@@ -1,4 +1,4 @@
--- гейфилд
+-- гейфилд "Trash", "Durov", "REDO", "Magnate", "Cirque", "Plodder", "Office Clerk", "Manager", "Director", "Oligarch", "Frozen Heart", "Bubble Gum", "Cats", "Glitch", "Dream", "Bloody Night", "M5 F90", "G63", "Porsche 911", "URUS", "Gold", "Dark", "Palm", "Burj", "Luxury", "Monarch", "Angel"
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 -- окно
 local Window = Rayfield:CreateWindow({
@@ -39,24 +39,38 @@ local Window = Rayfield:CreateWindow({
 })
 -- таб фарм
 local Tab = Window:CreateTab("Фарм")
+local Tab2 = Window:CreateTab("Настройки")
 -- локальные
-local selectedCase = "Trash"
-local caseAmount = 10
-local autoFarmActive = false
+local selectedCase = ""
+local caseAmount = nil
+local autoOpen = false
+local autoSell = false
 local autoChristmas = false
 -- кнопочки
 -- дропдаун кейсов
-local Dropdown = Tab:CreateDropdown({
+local Dropdown = Tab2:CreateDropdown({
    Name = "Выберите кейс",
    Options = {"Trash", "Durov", "REDO", "Magnate", "Cirque", "Plodder", "Office Clerk", "Manager", "Director", "Oligarch", "Frozen Heart", "Bubble Gum", "Cats", "Glitch", "Dream", "Bloody Night", "M5 F90", "G63", "Porsche 911", "URUS", "Gold", "Dark", "Palm", "Burj", "Luxury", "Monarch", "Angel"},
-   CurrentOption = {"Trash"},
+   CurrentOption = {""},
    MultipleOptions = false,
    Callback = function(Option)
       selectedCase = Option[1]
    end,
 })
+local Section = Tab2:CreateSection("Или введите название кейса вручную")
+-- инпут ручного ввода кейса
+local CustomInput = Tab2:CreateInput({
+   Name = "Вписать название кейса",
+   PlaceholderText = "Введите имя кейса",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+      if Text ~= "" then
+         selectedCase = Text
+      end
+   end,
+})
 -- инпут количества кейсов
-local Input = Tab:CreateInput({
+local Input = Tab2:CreateInput({
    Name = "Количество кейсов",
    PlaceholderText = "Введите число (1-10)",
    RemoveTextAfterFocusLost = false,
@@ -76,30 +90,37 @@ local Input = Tab:CreateInput({
       end
    end,
 })
+local Paragraph = Tab2:CreateParagraph({Title = "Важно!", Content = "Если выбираете через меню, то ничего не пишите в строку ниже! И наоборот."})
 -- тоггл автофарма
-local Toggle = Tab:CreateToggle({
-   Name = "Автофарм кейсов",
+Tab:CreateToggle({
+   Name = "Авто-открытие Кейсов",
    CurrentValue = false,
    Callback = function(Value)
-      autoFarmActive = Value
-      if autoFarmActive then
+      autoOpen = Value
+      if autoOpen then
          task.spawn(function()
-            while autoFarmActive do
-               local openArgs = {
-                  selectedCase,
-                  caseAmount
-               }
+            while autoOpen do
+               local args = {selectedCase, caseAmount}
                pcall(function()
-                  game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("OpenCase"):InvokeServer(unpack(openArgs))
+                  game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("OpenCase"):InvokeServer(unpack(args))
                end)
-               task.wait(1)
-               local sellArgs = {
-                  "Sell",
-                  "ALL",
-                  false
-               }
+               task.wait(0.5)
+            end
+         end)
+      end
+   end,
+})
+Tab:CreateToggle({
+   Name = "Авто-продажа",
+   CurrentValue = false,
+   Callback = function(Value)
+      autoSell = Value
+      if autoSell then
+         task.spawn(function()
+            while autoSell do
+               local args = {"Sell", "ALL", false}
                pcall(function()
-                  game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Inventory"):FireServer(unpack(sellArgs))
+                  game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Inventory"):FireServer(unpack(args))
                end)
                task.wait(0.5)
             end

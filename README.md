@@ -36,3 +36,5 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs
 - 🟢 Speed Clicker (пока сырой)
 - 🟢 99 Nights in the Forest (обычный voidware, но потом будет хаб со скриптами)
 - 🟢 NFT Battle (может быть, самый лучший скрипт сейчас)
+- 🟢 Flick (аимбот)
+- 🟢 Gun Grounds FFA (тот же самый аимбот, что на flick)

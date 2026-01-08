@@ -37,6 +37,10 @@ local Smooth = 0.2
 local FOV = 250
 local MaxAimDistance = 1500
 local WallCheck = false
+
+-- ДОБАВЛЕНО: проверка на команду
+local TeamCheck = false
+
 local ESPEnabled = false
 local ESPBox = false
 local ESPHealth = false
@@ -53,9 +57,16 @@ AimbotTab:CreateToggle({
 })
 
 AimbotTab:CreateToggle({
-    Name = "WallCheck",
+    Name = "Проверка на стены",
     CurrentValue = false,
     Callback = function(v) WallCheck = v end
+})
+
+-- ДОБАВЛЕНО: тоггл проверки на команду
+AimbotTab:CreateToggle({
+    Name = "Проверка на команду",
+    CurrentValue = false,
+    Callback = function(v) TeamCheck = v end
 })
 
 AimbotTab:CreateSlider({
@@ -138,6 +149,27 @@ local function alive(char)
     local h = char:FindFirstChildOfClass("Humanoid")
     return h and h.Health > 0
 end
+
+-- ДОБАВЛЕНО: проверка на тиммейтов (с фиксом для Neutral)
+local function sameTeam(p1, p2)
+    if not TeamCheck then return false end
+
+    -- если игра без команд / все нейтралы — не фильтруем
+    if p1.Neutral and p2.Neutral then
+        return false
+    end
+
+    if p1.Team ~= nil and p2.Team ~= nil then
+        return p1.Team == p2.Team
+    end
+
+    if p1.TeamColor ~= nil and p2.TeamColor ~= nil then
+        return p1.TeamColor == p2.TeamColor
+    end
+
+    return false
+end
+
 local rayParams = RaycastParams.new()
 rayParams.FilterType = Enum.RaycastFilterType.Blacklist
 rayParams.IgnoreWater = true
@@ -157,7 +189,7 @@ local function getTarget()
     local lpHRP = LP.Character and LP.Character:FindFirstChild("HumanoidRootPart")
     if not lpHRP then return end
     for _,plr in ipairs(Players:GetPlayers()) do
-        if plr ~= LP and plr.Character and alive(plr.Character) then
+        if plr ~= LP and plr.Character and alive(plr.Character) and not sameTeam(LP, plr) then
             local part = plr.Character:FindFirstChild(AimPart)
             local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
             if part and hrp then

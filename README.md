@@ -38,3 +38,4 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs
 - 🟢 NFT Battle (может быть, самый лучший скрипт сейчас)
 - 🟢 Flick (аимбот и еспы)
 - 🟢 Gun Grounds FFA (тот же самый скрипт, что на flick)
+- 🟢 Enter Sammy (чисто автофарм)

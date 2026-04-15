@@ -31,7 +31,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs
 🔵 - Долго не проверялось |
 - 🔵 Make a Army
 - 🔵 Blox Fruits (Hub со скриптами)
-- 🟢 Notoriety (чуть-чуть паста🤏🤏🤏)
+- 🟢 Notoriety (чуть-чуть паста🤏)
 - 🔵 Steal a Brainrot (Hub со скриптами)
 - 🔵 Speed Clicker (пока сырой)
 - 🔵 99 Nights in the Forest (обычный voidware, но потом будет хаб со скриптами)

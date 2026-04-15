@@ -31,11 +31,11 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs
 🔵 - Долго не проверялось |
 - 🔵 Make a Army
 - 🔵 Blox Fruits (Hub со скриптами)
-- 🟠 Notoriety (ач видимо усилили)
+- 🟢 Notoriety (ач видимо усилили)
 - 🔵 Steal a Brainrot (Hub со скриптами)
-- 🟢 Speed Clicker (пока сырой)
-- 🟢 99 Nights in the Forest (обычный voidware, но потом будет хаб со скриптами)
-- 🟢 NFT Battle (может быть, самый лучший скрипт сейчас)
-- 🟢 Flick (аимбот и еспы)
-- 🟢 Gun Grounds FFA (тот же самый скрипт, что на flick)
-- 🟢 Enter Sammy (чисто автофарм)
+- 🔵 Speed Clicker (пока сырой)
+- 🔵 99 Nights in the Forest (обычный voidware, но потом будет хаб со скриптами)
+- 🔵 NFT Battle (может быть, самый лучший скрипт сейчас)
+- 🔵 Flick (аимбот и еспы)
+- 🔵 Gun Grounds FFA (тот же самый скрипт, что на flick)
+- 🔵 Enter Sammy (чисто автофарм)

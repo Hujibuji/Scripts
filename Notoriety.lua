@@ -23,12 +23,12 @@ local Divider = Tab:CreateDivider()
 local Button = Tab:CreateButton({
    Name = "Русский",
    Callback = function()
-   https://raw.githubusercontent.com/Hujibuji/Scripts/refs/heads/main/russian.lua
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs/heads/main/russian.lua"))()
    end,
 })
 local Button = Tab:CreateButton({
    Name = "English",
    Callback = function()
-   https://raw.githubusercontent.com/Hujibuji/Scripts/refs/heads/main/english.lua
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/Hujibuji/Scripts/refs/heads/main/english.lua"))()
    end,
 })

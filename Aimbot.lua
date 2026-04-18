@@ -311,7 +311,6 @@ local function createESP(player)
 
     ESPObjects[player] = esp
 end
-
 local function removeESP(player)
     local esp = ESPObjects[player]
     if esp then

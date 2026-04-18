@@ -6,53 +6,63 @@ local Window = Rayfield:CreateWindow({
     LoadingSubtitle = "by kaLLoware",
     ShowText = "hub",
     Theme = "Default",
+
     ToggleUIKeybind = "K",
+
     DisableRayfieldPrompts = false,
     DisableBuildWarnings = false,
-    ConfigurationSaving = { Enabled = false },
-    Discord = { Enabled = false },
+
+    ConfigurationSaving = {
+        Enabled = false,
+    },
+
+    Discord = {
+        Enabled = false,
+    },
+
     KeySystem = false,
 })
 
--- сервисы / локалки
+-- сервисы
 local Players           = game:GetService("Players")
 local RunService        = game:GetService("RunService")
 local Workspace         = game:GetService("Workspace")
 local GuiService        = game:GetService("GuiService")
+local UserInputService  = game:GetService("UserInputService")
 
 local Camera = Workspace.CurrentCamera
 local LP     = Players.LocalPlayer
 local Mouse  = LP:GetMouse()
 
--- конфиг аима
+-- настройки аимбота
 local AimbotEnabled  = false
 local AimPart        = "Head"
 local Smooth         = 0.2
 local FOV            = 250
-local MaxAimDistance = 1500
+local MaxAimDistance  = 1500
 local WallCheck      = false
 local TeamCheck      = false
 local FOVCircleColor = Color3.fromRGB(255, 255, 255)
 
--- конфиг есп
-local ESPEnabled    = false
-local ESPBox        = false
-local ESPHealth     = false
-local ESPName       = false
-local ESPDistance   = false
-local BoxColor      = Color3.fromRGB(255, 255, 255)
-local NameColor     = Color3.fromRGB(255, 255, 255)
+-- настройки есп
+local ESPEnabled  = false
+local ESPBox      = false
+local ESPHealth   = false
+local ESPName     = false
+local ESPDistance  = false
+local BoxColor    = Color3.fromRGB(255, 255, 255)
+local NameColor   = Color3.fromRGB(255, 255, 255)
 local DistanceColor = Color3.fromRGB(200, 200, 200)
 
--- таблица коннектов шоб потом выгрузить без следов
+-- для отключения при выгрузке
 local connections = {}
 
--- табы
+-- вкладки
 local AimbotTab = Window:CreateTab("Аимбот")
 local ESPTab    = Window:CreateTab("ESP")
 local MiscTab   = Window:CreateTab("Прочее")
 
--- вкладка аима
+-- ui аимбота
 AimbotTab:CreateToggle({
     Name = "Включить аимбот",
     CurrentValue = false,
@@ -76,7 +86,11 @@ AimbotTab:CreateDropdown({
     Options = {"Head", "HumanoidRootPart", "UpperTorso", "LowerTorso"},
     CurrentOption = {"Head"},
     Callback = function(v)
-        AimPart = type(v) == "table" and v[1] or v
+        if type(v) == "table" then
+            AimPart = v[1]
+        else
+            AimPart = v
+        end
     end
 })
 
@@ -110,7 +124,7 @@ AimbotTab:CreateColorPicker({
     Callback = function(c) FOVCircleColor = c end
 })
 
--- вкладка есп
+-- ui есп
 ESPTab:CreateToggle({
     Name = "Включить ЕСП",
     CurrentValue = false,
@@ -159,27 +173,24 @@ ESPTab:CreateColorPicker({
     Callback = function(c) DistanceColor = c end
 })
 
--- рендер фов кружка
+-- кружок фов на экране
 local FOVCircle = Drawing.new("Circle")
 FOVCircle.Filled      = false
 FOVCircle.Thickness   = 1.5
 FOVCircle.Transparency = 1
 FOVCircle.NumSides    = 64
 
--- всякие утилы
-
--- чекаем жив ли тип
+-- проверяем жив ли чар
 local function isAlive(char)
     if not char then return false end
     local h = char:FindFirstChildOfClass("Humanoid")
     return h and h.Health > 0
 end
 
--- чек на тиму (учитываем нейтралов)
+-- тимчек (если оба нейтралы — считаем врагами)
 local function sameTeam(p1, p2)
     if not TeamCheck then return false end
 
-    -- если оба без тимы то пиздимся
     if p1.Neutral and p2.Neutral then
         return false
     end
@@ -195,12 +206,12 @@ local function sameTeam(p1, p2)
     return false
 end
 
--- параметры луча шоб не плодить
+-- рейкаст для валлчека (один раз создаём параметры)
 local rayParams = RaycastParams.new()
 rayParams.FilterType  = Enum.RaycastFilterType.Exclude
 rayParams.IgnoreWater = true
 
--- визибл чек
+-- проверка видимости (через стены)
 local function isVisible(part)
     local myChar = LP.Character
     if not myChar then return true end
@@ -215,20 +226,20 @@ local function isVisible(part)
     return ray.Instance:IsDescendantOf(part.Parent)
 end
 
--- маус позишн для дроуинга (с учетом гуи инсета)
+-- позиция мыши для Drawing (с учётом инсета)
 local function getMouseDrawingPos()
     local inset = GuiService:GetGuiInset()
     return Vector2.new(Mouse.X + inset.X, Mouse.Y + inset.Y)
 end
 
--- маус позишн для вьюпорта
+-- позиция мыши во вьюпорте (для WorldToViewportPoint)
 local function getMouseViewportPos()
     return Vector2.new(Mouse.X, Mouse.Y)
 end
 
--- ищем ближайшего чела в радиусе фова
-local function findTarget(fovRadius, aimPartName, maxDist, useWallCheck)
-    local best, bestDist2D = nil, fovRadius
+-- ищем ближайшего врага в фов
+local function getTarget()
+    local best, bestDist2D = nil, FOV
 
     local myChar = LP.Character
     if not myChar then return nil end
@@ -241,13 +252,13 @@ local function findTarget(fovRadius, aimPartName, maxDist, useWallCheck)
         if plr ~= LP and not sameTeam(LP, plr) then
             local char = plr.Character
             if char and isAlive(char) then
-                local part = char:FindFirstChild(aimPartName)
+                local part = char:FindFirstChild(AimPart)
                 local hrp  = char:FindFirstChild("HumanoidRootPart")
 
                 if part and hrp then
                     local worldDist = (myHRP.Position - hrp.Position).Magnitude
-                    if worldDist <= maxDist then
-                        local visible = (not useWallCheck) or isVisible(part)
+                    if worldDist <= MaxAimDistance then
+                        local visible = (not WallCheck) or isVisible(part)
                         if visible then
                             local pos, onScreen = Camera:WorldToViewportPoint(part.Position)
                             if onScreen then
@@ -267,16 +278,11 @@ local function findTarget(fovRadius, aimPartName, maxDist, useWallCheck)
     return best
 end
 
--- враппер для аима
-local function getTarget()
-    return findTarget(FOV, AimPart, MaxAimDistance, WallCheck)
-end
-
--- логика есп (рендер/удаление)
+-- есп объекты для каждого игрока
 local ESPObjects = {}
 
 local function createESP(player)
-    if ESPObjects[player] then return end -- скип дубликатов
+    if ESPObjects[player] then return end
 
     local esp = {
         Box      = Drawing.new("Square"),
@@ -316,18 +322,26 @@ local function removeESP(player)
     end
 end
 
--- цвет хп бара (зеленый -> желтый -> красный)
+-- цвет хп-бара: зелёный > жёлтый > красный
 local function healthColor(hp)
     if hp > 0.5 then
         local t = (hp - 0.5) * 2
-        return Color3.fromRGB(math.floor(255 * (1 - t)), 255, 0)
+        return Color3.fromRGB(
+            math.floor(255 * (1 - t)),
+            255,
+            0
+        )
     else
         local t = hp * 2
-        return Color3.fromRGB(255, math.floor(255 * t), 0)
+        return Color3.fromRGB(
+            255,
+            math.floor(255 * t),
+            0
+        )
     end
 end
 
--- инициализируем есп на тех кто уже на сервере
+-- создаём есп для тех кто уже в игре
 for _, p in ipairs(Players:GetPlayers()) do
     if p ~= LP then createESP(p) end
 end
@@ -338,20 +352,19 @@ end)
 
 connections[#connections + 1] = Players.PlayerRemoving:Connect(removeESP)
 
--- мейн луп
+-- главный цикл
 connections[#connections + 1] = RunService.RenderStepped:Connect(function()
-    -- апдейт камеры если сдохли
     Camera = Workspace.CurrentCamera
 
     local drawingMousePos = getMouseDrawingPos()
 
-    -- фов кружок
+    -- фов круг
     FOVCircle.Position = drawingMousePos
     FOVCircle.Radius   = FOV
     FOVCircle.Color    = FOVCircleColor
     FOVCircle.Visible  = AimbotEnabled
 
-    -- наводка аимбота
+    -- аимбот (камера)
     if AimbotEnabled then
         local target = getTarget()
         if target then
@@ -363,7 +376,7 @@ connections[#connections + 1] = RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- апдейт есп
+    -- есп
     local myChar = LP.Character
     local myHRP  = myChar and myChar:FindFirstChild("HumanoidRootPart")
 
@@ -382,11 +395,13 @@ connections[#connections + 1] = RunService.RenderStepped:Connect(function()
                 local size  = Vector2.new(35, 50) * scale
                 local tl    = Vector2.new(pos.X - size.X / 2, pos.Y - size.Y / 2)
 
+                -- бокс
                 esp.Box.Size     = size
                 esp.Box.Position = tl
                 esp.Box.Color    = BoxColor
                 esp.Box.Visible  = ESPBox
 
+                -- хп бар
                 local hp = math.clamp(hum.Health / hum.MaxHealth, 0, 1)
 
                 esp.HealthBG.Size     = Vector2.new(4, size.Y)
@@ -398,11 +413,13 @@ connections[#connections + 1] = RunService.RenderStepped:Connect(function()
                 esp.Health.Color    = healthColor(hp)
                 esp.Health.Visible  = ESPHealth
 
+                -- ник
                 esp.Name.Text     = plr.DisplayName
                 esp.Name.Color    = NameColor
                 esp.Name.Position = Vector2.new(pos.X, tl.Y - 16)
                 esp.Name.Visible  = ESPName
 
+                -- дистанция
                 if myHRP then
                     local dist = math.floor((myHRP.Position - hrp.Position).Magnitude)
                     esp.Dist.Text     = dist .. "m"
@@ -421,7 +438,7 @@ connections[#connections + 1] = RunService.RenderStepped:Connect(function()
     end
 end)
 
--- фуллбрайт и прочий мусор
+-- фуллбрайт
 local FullbrightEnabled = false
 local originalAmbient, originalBrightness, originalOutdoorAmbient, originalTime, originalFog
 
@@ -438,11 +455,11 @@ local function applyFullbright()
     local lighting = game:GetService("Lighting")
     lighting.Ambient        = Color3.fromRGB(255, 255, 255)
     lighting.Brightness     = 2
-    lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+    lighting.OutdoorAmbient  = Color3.fromRGB(255, 255, 255)
     lighting.ClockTime      = 12
     lighting.FogEnd         = 1e9
 
-    -- сносим всякие эффекты затемнения
+    -- убираем всё что затемняет
     for _, effect in ipairs(lighting:GetChildren()) do
         if effect:IsA("Atmosphere") then
             effect.Density = 0
@@ -478,14 +495,14 @@ MiscTab:CreateToggle({
     end
 })
 
--- анти-оверрайд фуллбрайта игрой
+-- если игра меняет освещение — ставим обратно
 connections[#connections + 1] = game:GetService("Lighting").Changed:Connect(function()
     if FullbrightEnabled then
         task.defer(applyFullbright)
     end
 end)
 
--- фпс буст (режет графон)
+-- фпс буст
 local FPSBoostApplied = false
 local fpsBoostConnection = nil
 
@@ -508,7 +525,7 @@ end
 local function applyFPSBoost()
     local lighting = game:GetService("Lighting")
 
-    -- убиваем небо, облака, постпроцессинг
+    -- убиваем пост-эффекты, атмосферу, небо, облака
     for _, v in ipairs(lighting:GetDescendants()) do
         pcall(function()
             if v:IsA("PostEffect") or v:IsA("Atmosphere")
@@ -518,7 +535,7 @@ local function applyFPSBoost()
         end)
     end
 
-    -- парсим воркспейс
+    -- стрипаем воркспейс
     for _, v in ipairs(Workspace:GetDescendants()) do
         pcall(function() stripObject(v) end)
     end
@@ -535,17 +552,26 @@ local function applyFPSBoost()
         end)
     end
 
-    -- рендер в пол
-    pcall(function() settings().Rendering.QualityLevel = Enum.QualityLevel.Level01 end)
+    -- рендер на минимум
+    pcall(function()
+        settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+    end)
 
+    -- совместимое освещение (если эксплоит поддерживает)
     if sethiddenproperty then
-        pcall(function() sethiddenproperty(lighting, "Technology", Enum.Technology.Compatibility) end)
+        pcall(function()
+            sethiddenproperty(lighting, "Technology", Enum.Technology.Compatibility)
+        end)
     end
 
-    -- чистим новые объекты на лету
-    if fpsBoostConnection then fpsBoostConnection:Disconnect() end
+    -- новые объекты тоже стрипаем
+    if fpsBoostConnection then
+        fpsBoostConnection:Disconnect()
+    end
     fpsBoostConnection = Workspace.DescendantAdded:Connect(function(v)
-        task.defer(function() pcall(function() stripObject(v) end) end)
+        task.defer(function()
+            pcall(function() stripObject(v) end)
+        end)
     end)
     connections[#connections + 1] = fpsBoostConnection
 end
@@ -567,15 +593,16 @@ MiscTab:CreateButton({
 MiscTab:CreateButton({
     Name = "Выгрузить скрипт",
     Callback = function()
-        -- чистим коннекты
+        -- дисконнектим всё
         for _, conn in ipairs(connections) do
             pcall(function() conn:Disconnect() end)
         end
         connections = {}
 
-        -- убиваем рендер
+        -- убираем фов круг
         pcall(function() FOVCircle:Remove() end)
 
+        -- убираем есп
         local toRemove = {}
         for plr in pairs(ESPObjects) do
             toRemove[#toRemove + 1] = plr
@@ -584,7 +611,7 @@ MiscTab:CreateButton({
             removeESP(plr)
         end
 
-        -- сносим юайку
+        -- закрываем ui
         Rayfield:Destroy()
     end
 })

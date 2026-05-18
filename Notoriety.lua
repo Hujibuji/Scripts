@@ -1,8 +1,8 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
-   Name = "hueta.cc",
+   Name = "kalloware.space",
    Icon = 0,
-   LoadingTitle = "hueta.cc",
+   LoadingTitle = "kalloware.space",
    LoadingSubtitle = "by kaLLoware",
    ShowText = "hueta.cc",
    Theme = "Default",

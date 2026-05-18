@@ -25,11 +25,11 @@ local Camera = Workspace.CurrentCamera
 
 -- ==================== СОЗДАНИЕ ОКНА ====================
 local Window = Rayfield:CreateWindow({
-    Name = "hueta.cc - Notoriety v2.2",
+    Name = "kalloware.space",
     Icon = "swords",
-    LoadingTitle = "hueta.cc",
-    LoadingSubtitle = "от kaLLoware — Версия ADMIN",
-    ShowText = "hueta.cc",
+    LoadingTitle = "by kaLLoware",
+    LoadingSubtitle = "kalloware.space",
+    ShowText = "kalloware.space",
     Theme = "Default",
     ToggleUIKeybind = Enum.KeyCode.RightShift,
     DisableRayfieldPrompts = false,
